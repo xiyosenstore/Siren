@@ -3,7 +3,7 @@ use crate::common::{parse_addr, parse_port};
 use worker::*;
 
 impl <'a> ProxyStream<'a> {
-    pub async fn process_shadowsocks(&mut self) -> Result<()> {
+    pub async fn process_ss(&mut self) -> Result<()> {
         // read port and address
         let remote_addr = parse_addr(self).await?;
         let remote_port = parse_port(self).await?;

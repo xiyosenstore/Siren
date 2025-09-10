@@ -1,31 +1,27 @@
 use super::ProxyStream;
+use tokio::io::AsyncReadExt;
 use crate::common::{parse_addr, parse_port};
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use uuid::Uuid;
 use worker::*;
 
 impl <'a> ProxyStream<'a> {
-    pub async fn process_vless(&mut self) -> Result<()> {
-        // ignore version
-        self.read_u8().await?;
-        
-        // read uuid
-        let mut user_id = [0u8; 16];
-        self.read_exact(&mut user_id).await?;
-        let _uuid = Uuid::from_bytes(user_id);
-        
-        // read protobuf
-        let m_len = self.read_u8().await?;
-        let mut protobuf = vec![0u8; m_len as _];
-        self.read_exact(&mut protobuf).await?;
+    pub async fn process_tr(&mut self) -> Result<()> {
+        // ignore user_id
+        let mut _user_id = [0u8; 56];
+        self.read_exact(&mut _user_id).await?;
 
+        // remove crlf
+        self.read_u16().await?;
+        
         // read instruction
         let network_type = self.read_u8().await?;
         let is_tcp = network_type == 1;
 
         // read port and address
-        let remote_port = parse_port(self).await?;
         let remote_addr = parse_addr(self).await?;
+        let remote_port = parse_port(self).await?;
+
+        // remove crlf
+        self.read_u16().await?;
 
         if is_tcp {
             let addr_pool = [
@@ -34,7 +30,6 @@ impl <'a> ProxyStream<'a> {
             ];
 
             // send header
-            self.write(&[0u8; 2]).await?;
             for (target_addr, target_port) in addr_pool {
                 if let Err(e) = self.handle_tcp_outbound(target_addr, target_port).await {
                     console_error!("error handling tcp: {}", e)

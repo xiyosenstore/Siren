@@ -1,6 +1,6 @@
 use super::ProxyStream;
 use crate::common::{
-    hash, parse_port, parse_addr, KDFSALT_CONST_AEAD_RESP_HEADER_IV, KDFSALT_CONST_AEAD_RESP_HEADER_KEY, KDFSALT_CONST_AEAD_RESP_HEADER_LEN_IV, KDFSALT_CONST_AEAD_RESP_HEADER_LEN_KEY, KDFSALT_CONST_VMESS_HEADER_PAYLOAD_AEAD_IV, KDFSALT_CONST_VMESS_HEADER_PAYLOAD_AEAD_KEY, KDFSALT_CONST_VMESS_HEADER_PAYLOAD_LENGTH_AEAD_IV, KDFSALT_CONST_VMESS_HEADER_PAYLOAD_LENGTH_AEAD_KEY
+    hash, parse_port, parse_addr, KDFSALT_CONST_AEAD_RESP_HEADER_IV, KDFSALT_CONST_AEAD_RESP_HEADER_KEY, KDFSALT_CONST_AEAD_RESP_HEADER_LEN_IV, KDFSALT_CONST_AEAD_RESP_HEADER_LEN_KEY, KDFSALT_CONST_VM_HEADER_PAYLOAD_AEAD_IV, KDFSALT_CONST_VM_HEADER_PAYLOAD_AEAD_KEY, KDFSALT_CONST_VM_HEADER_PAYLOAD_LENGTH_AEAD_IV, KDFSALT_CONST_VM_HEADER_PAYLOAD_LENGTH_AEAD_KEY
 };
 use std::io::Cursor;
 use aes::cipher::KeyInit;
@@ -38,7 +38,7 @@ impl <'a> ProxyStream<'a> {
             let header_length_key = &hash::kdf(
                 &key,
                 &[
-                    KDFSALT_CONST_VMESS_HEADER_PAYLOAD_LENGTH_AEAD_KEY,
+                    KDFSALT_CONST_VM_HEADER_PAYLOAD_LENGTH_AEAD_KEY,
                     &auth_id,
                     &nonce,
                 ],
@@ -46,7 +46,7 @@ impl <'a> ProxyStream<'a> {
             let header_length_nonce = &hash::kdf(
                 &key,
                 &[
-                    KDFSALT_CONST_VMESS_HEADER_PAYLOAD_LENGTH_AEAD_IV,
+                    KDFSALT_CONST_VM_HEADER_PAYLOAD_LENGTH_AEAD_IV,
                     &auth_id,
                     &nonce,
                 ],
@@ -72,14 +72,14 @@ impl <'a> ProxyStream<'a> {
             let payload_key = &hash::kdf(
                 &key,
                 &[
-                    KDFSALT_CONST_VMESS_HEADER_PAYLOAD_AEAD_KEY,
+                    KDFSALT_CONST_VM_HEADER_PAYLOAD_AEAD_KEY,
                     &auth_id,
                     &nonce,
                 ],
             )[..16];
             let payload_nonce = &hash::kdf(
                 &key,
-                &[KDFSALT_CONST_VMESS_HEADER_PAYLOAD_AEAD_IV, &auth_id, &nonce],
+                &[KDFSALT_CONST_VM_HEADER_PAYLOAD_AEAD_IV, &auth_id, &nonce],
             )[..12];
 
             let payload = Payload {
@@ -95,7 +95,7 @@ impl <'a> ProxyStream<'a> {
         Ok(header_payload)
     }
 
-    pub async fn process_vmess(&mut self) -> Result<()> {
+    pub async fn process_vm(&mut self) -> Result<()> {
         let mut buf = Cursor::new(self.aead_decrypt().await?);
 
         // https://xtls.github.io/en/development/protocols/vmess.html#command-section

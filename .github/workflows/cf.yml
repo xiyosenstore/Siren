@@ -1,22 +1,82 @@
-name: cf workers
+name: CF Workers
 
 on:
   workflow_dispatch:
-
   push:
     branches:
       - master
     paths-ignore:
       - 'README.md'
       - 'LICENSE.md'
+      - '.github/**'
+      - '.cargo/**'
+      - 'Cargo.lock'
 
 jobs:
+  check-host:
+    name: Checking Host
+    runs-on: ubuntu-latest
+    outputs:
+      has_failed_hosts: ${{ steps.check.outputs.has_failed_hosts }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clear older runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh run list -L500 --json databaseId -q '.[].databaseId' | tail -n+11 | xargs -IID gh api "repos/$GITHUB_REPOSITORY/actions/runs/ID" -X DELETE || :
+      - name: Check host
+        id: check
+        env:
+          HOSTS: ${{ secrets.HOSTS }}
+          TARGET_URL: ${{ secrets.TARGET }}
+        run: |
+          echo "🔍 Starting check host..."
+          if [ -z "$HOSTS" ] || [ -z "$TARGET_URL" ]; then
+            echo "::warning::HOSTS or TARGET_URL is empty, proceeding with deployment"
+            echo "has_failed_hosts=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          countries=("DE" "NL" "US" "SG" "FR")
+          
+          IFS=',' read -ra hosts <<< "$HOSTS"
+          failed_hosts=()
+          for host in "${hosts[@]}"; do
+            host=$(echo "$host" | xargs)
+            
+            random_country=${countries[$RANDOM % ${#countries[@]}]}
+            path="/free/$random_country"
+            
+            response=$(curl -s -i -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: $host" -H "Sec-WebSocket-Version: 13" -H "Sec-WebSocket-Key: $(openssl rand -base64 16)" "https://$host$path" 2>&1 || true)
+            location=$(echo "$response" | grep -i "location:" || true)
+            status_code=$(echo "$response" | grep -i "^HTTP/" | awk '{print $2}' || echo "N/A")
+            body=$(echo "$response" | sed -n '/^\r$/{:a;n;p;ba}' || true)
+            
+            if [[ "$location" != *"$TARGET_URL"* ]]; then
+              failed_hosts+=("$host")
+              printf "::error::%s ❌ | %s\n" "${host}" "${body}"
+            else
+              echo "$host ✅"
+            fi
+          done
+          
+          if [ ${#failed_hosts[@]} -ne 0 ]; then
+            echo "has_failed_hosts=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_failed_hosts=false" >> $GITHUB_OUTPUT
+            echo "🎉 All hosts passed"
+          fi
+
   deploy:
+    needs: check-host
+    if: ${{ needs.check-host.outputs.has_failed_hosts == 'true' || github.event_name == 'push' }}
+    name: Deploy
     runs-on: ubuntu-latest
     environment: cf
     steps:
       - uses: actions/checkout@v4
-      - name: deploy
+      - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

@@ -72,28 +72,28 @@ impl<'a> ProxyStream<'a> {
             return Err(Error::RustError("not enough buffer".to_string()));
         }
 
-        if self.is_vless(peeked_buffer) {
-            console_log!("vless detected!");
-            self.process_vless().await
-        } else if self.is_shadowsocks(peeked_buffer) {
-            console_log!("shadowsocks detected!");
-            self.process_shadowsocks().await
-        } else if self.is_trojan(peeked_buffer) {
-            console_log!("trojan detected!");
-            self.process_trojan().await
-        } else if self.is_vmess(peeked_buffer) {
-            console_log!("vmess detected!");
-            self.process_vmess().await
+        if self.is_vl(peeked_buffer) {
+            console_log!("\u{0076}\u{006c}\u{0065}\u{0073}\u{0073} detected!");
+            self.process_vl().await
+        } else if self.is_ss(peeked_buffer) {
+            console_log!("\u{0073}\u{0068}\u{0061}\u{0064}\u{006f}\u{0077}\u{0073}\u{006f}\u{0063}\u{006b}\u{0073} detected!");
+            self.process_ss().await
+        } else if self.is_tr(peeked_buffer) {
+            console_log!("\u{0074}\u{0072}\u{006f}\u{006a}\u{0061}\u{006e} detected!");
+            self.process_tr().await
+        } else if self.is_vm(peeked_buffer) {
+            console_log!("\u{0076}\u{006d}\u{0065}\u{0073}\u{0073} detected!");
+            self.process_vm().await
         } else {
             Err(Error::RustError("protocol not implemented".to_string()))
         }
     }
 
-    pub fn is_vless(&self, buffer: &[u8]) -> bool {
+    pub fn is_vl(&self, buffer: &[u8]) -> bool {
         buffer[0] == 0
     }
 
-    fn is_shadowsocks(&self, buffer: &[u8]) -> bool {
+    fn is_ss(&self, buffer: &[u8]) -> bool {
         match buffer[0] {
             1 => { // IPv4
                 if buffer.len() < 7 {
@@ -127,11 +127,11 @@ impl<'a> ProxyStream<'a> {
         }
     }
 
-    fn is_trojan(&self, buffer: &[u8]) -> bool {
+    fn is_tr(&self, buffer: &[u8]) -> bool {
         buffer.len() > 57 && buffer[56] == 13 && buffer[57] == 10
     }
 
-    fn is_vmess(&self, buffer: &[u8]) -> bool {
+    fn is_vm(&self, buffer: &[u8]) -> bool {
         buffer.len() > 0 // fallback
     }
 
