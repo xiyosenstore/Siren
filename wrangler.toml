@@ -3,9 +3,27 @@ main = "build/worker/shim.mjs"
 compatibility_date = "2025-08-15"
 minify = true
 
+routes = [
+
+  { pattern = "ouzora.dpdns.org", custom_domain = true },
+  { pattern = "ava.game.naver.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "demo.appsflyer.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "quiz.int.vidio.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "graph.instagram.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "blog.webex.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "zaintest.vuclip.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "bimbel.ruangguru.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "support.zoom.us.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "cache.netflix.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "investor.fb.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "nontontv.vidio.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "blog.clova.line.me.ouzora.dpdns.org", custom_domain = true },
+]
+
+
 [[kv_namespaces]]
 binding = "SIREN"
-id = "2e9fa46e3a984694a31c75f10057f8b4"
+id = "0f1645175a8e44c5ac7bceea1af5ed78"
 
 [build]
 command = "cargo install worker-build && worker-build --release"
