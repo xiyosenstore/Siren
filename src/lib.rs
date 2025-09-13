@@ -26,8 +26,8 @@ async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
 
     Router::with_data(config)
         .on_async("/", fe)
-        .on_async("/free/cc/:proxyip", tunnel)
-        .on_async("/free/:proxyip", tunnel)
+        .on_async("/sub", sub)
+        .on_async("/Benxx-Project/:proxyip", tunnel)
         .on_async("/:proxyip", tunnel)
         .run(req, env)
         .await
