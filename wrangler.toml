@@ -5,19 +5,11 @@ minify = true
 
 routes = [
 
-  { pattern = "ouzora.dpdns.org", custom_domain = true },
-  { pattern = "ava.game.naver.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "demo.appsflyer.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "quiz.int.vidio.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "graph.instagram.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "blog.webex.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "zaintest.vuclip.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "bimbel.ruangguru.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "support.zoom.us.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "cache.netflix.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "investor.fb.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "nontontv.vidio.com.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "blog.clova.line.me.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "nuclear.benxx.workers.dev", custom_domain = true },
+  { pattern = "ava.game.naver.com.nuclear.benxx.workers.dev", custom_domain = true },
+  { pattern = "bimbel.ruangguru.com.nuclear.benxx.workers.dev", custom_domain = true },
+  { pattern = "support.zoom.us.nuclear.benxx.workers.dev", custom_domain = true },
+  { pattern = "nontontv.vidio.com.nuclear.benxx.workers.dev", custom_domain = true },
 ]
 
 
@@ -33,5 +25,5 @@ build = { command = "cargo install worker-build && worker-build --dev" }
 
 [vars]
 UUID = "2bcfbfba-b446-4ad5-93ad-72af9e008f61"
-MAIN_PAGE_URL = "https://siren.cloudaccess.host/"
+MAIN_PAGE_URL = "https://siren-web.benxx.workers.dev"
 PROXY_KV_URL = "https://siren.cloudaccess.host/best-latency.json"
