@@ -12,12 +12,12 @@ routes = [
   { pattern = "nontontv.vidio.com.nuclear.benxx.workers.dev", custom_domain = true },
   { pattern = "collection.linefriends.com.nuclear.benxx.workers.dev", custom_domain = true },  
   
-  { pattern = "nuclear.ouzora.dpdns.org", custom_domain = true },  
-  { pattern = "collection.linefriends.com.nuclear.ouzora.dpdns.org", custom_domain = true },  
-  { pattern = "ava.game.naver.com.nuclear.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "bimbel.ruangguru.com.nuclear.ouzora.dpdns.org", custom_domain = true },
-  { pattern = "support.zoom.us.ouzora.nuclear.dpdns.org", custom_domain = true },
-  { pattern = "nontontv.vidio.com.nuclear.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "ouzora.dpdns.org", custom_domain = true },  
+  { pattern = "collection.linefriends.com.ouzora.dpdns.org", custom_domain = true },  
+  { pattern = "ava.game.naver.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "bimbel.ruangguru.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "support.zoom.us.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "nontontv.vidio.com.ouzora.dpdns.org", custom_domain = true },
 ]
 
 
