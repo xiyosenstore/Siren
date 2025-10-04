@@ -27,5 +27,5 @@ build = { command = "cargo install worker-build && worker-build --dev" }
 
 [vars]
 UUID = "2bcfbfba-b446-4ad5-93ad-72af9e008f61"
-MAIN_PAGE_URL = "https://siren-web.benxx.workers.dev"
+MAIN_PAGE_URL = "https://ouzora.dpdns.org"
 PROXY_KV_URL = "https://siren.cloudaccess.host/best-latency.json"
