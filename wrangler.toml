@@ -5,6 +5,7 @@ minify = true
 
 routes = [
 
+  { pattern = "nuclear.benxx.workers.dev", custom_domain = true },  
   { pattern = "ava.game.naver.com.nuclear.benxx.workers.dev", custom_domain = true },
   { pattern = "bimbel.ruangguru.com.nuclear.benxx.workers.dev", custom_domain = true },
   { pattern = "support.zoom.us.nuclear.benxx.workers.dev", custom_domain = true },
