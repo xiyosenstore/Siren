@@ -5,6 +5,14 @@ minify = true
 
 routes = [
 
+  { pattern = "ouzora.dpdns.org", custom_domain = true },  
+  { pattern = "collection.linefriends.com.ouzora.dpdns.org", custom_domain = true },  
+  { pattern = "ava.game.naver.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "bimbel.ruangguru.com.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "support.zoom.us.ouzora.dpdns.org", custom_domain = true },
+  { pattern = "nontontv.vidio.com.ouzora.dpdns.org", custom_domain = true },
+
+
   { pattern = "nuclear.benxx.workers.dev", custom_domain = true },  
   { pattern = "ava.game.naver.com.nuclear.benxx.workers.dev", custom_domain = true },
   { pattern = "bimbel.ruangguru.com.nuclear.benxx.workers.dev", custom_domain = true },
@@ -27,5 +35,5 @@ build = { command = "cargo install worker-build && worker-build --dev" }
 
 [vars]
 UUID = "2bcfbfba-b446-4ad5-93ad-72af9e008f61"
-MAIN_PAGE_URL = "https://ouzora.dpdns.org"
+MAIN_PAGE_URL = "https://siren-web.benxx.workers.dev"
 PROXY_KV_URL = "https://siren.cloudaccess.host/best-latency.json"
